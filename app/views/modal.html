@@ -1,5 +1,6 @@
 <html>
 <script src="https://static.freshcloud.io/fdk/2.0/assets/fresh_client.js"></script>
+<link rel="stylesheet" type="text/css" href="https://static.freshdev.io/fdk/2.0/assets/freshdesk.css" />
 <script>
   var boardID, teamID
   app.initialized().then(function getClient(_client) {
@@ -27,7 +28,7 @@
       headers = { "Authorization": 'Bearer <%= access_token %>', 'Content-Type': 'Application/json' },
       body = { emails: [document.getElementById('email').value], role: document.getElementById('role').value, "teamInvitationStrategy": "off", message: document.getElementById('message').value }
     reqData = { body: JSON.stringify(body), headers: headers, isOAuth: true },
-      console.log('reqData', reqData)
+      console.log('inside of shareBoard', reqData)
     url = 'https://api.miro.com/v1' + path;
     app.initialized().then(function getClient(_client) {
     client = _client;
@@ -37,6 +38,7 @@
         },
           function (error) {
             //handle failure
+            console.log('inside of failure')
             inviteToTeam()
           })
     })
@@ -44,29 +46,35 @@
 
   // method to invite user to team
   function inviteToTeam() {
+    console.log('inviteTeam')
     var path = '/teams/'+teamID+'/invite'
       headers = { "Authorization": 'Bearer <%= access_token %>', 'Content-Type': 'Application/json' },
       body = { emails: [document.getElementById('email').value]}
     reqData = { body: JSON.stringify(body), headers: headers, isOAuth: true },
-      console.log('reqData', reqData)
+      console.log('reqData of inviteTeam', reqData)
     url = 'https://api.miro.com/v1' + path;
     app.initialized().then(function getClient(_client) {
     client = _client;
       client.request.post(url, reqData)
         .then(function (data) {
           console.log('data', data)
-          if(data.status === 200) console.log('invited successfully')
+          if(data.status === 200) {
+            var statusText = document.getElementById('error')
+            statusText.innerHTML = "<div class='alert alert-info'>User is not present in your team. Thus will be added to the team first & would be able to access all boards</div><div class='alert alert-success'>Invited to team successfully</div>";
+          }
         },
           function (error) {
             console.log('error', error)
+            notify(error)
           })
     })
   }
 
 
   function notify(response) {
-    var status = document.getElementById('error')
-    status.innerHTML = response.status === 200 ? 'Board shared successfully' : JSON.parse(response.response).message
+    console.log('response of notify', response.status)
+    var statusText = document.getElementById('error')
+    statusText.innerHTML = response.status === 200 ? "<div class='alert alert-success'>Invite send successfully, user would be able to access the board once accepted!</div>" : "<div class='alert alert-danger'>"+ JSON.parse(response.response).message +"</div>";
   }
   
 </script>
