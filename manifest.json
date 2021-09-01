@@ -1,0 +1,14 @@
+{
+  "platform-version": "2.0",
+  "product": {
+    "freshdesk": {
+      "location": {
+        "ticket_sidebar": {
+          "url": "index.html",
+          "icon": "styles/images/miro-logo.svg"
+        }
+      }
+    }
+  },
+  "whitelisted-domains":["https://api.miro.com"]
+}

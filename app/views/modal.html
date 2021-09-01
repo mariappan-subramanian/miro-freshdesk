@@ -1,0 +1,95 @@
+<html>
+<script src="https://static.freshcloud.io/fdk/2.0/assets/fresh_client.js"></script>
+<script>
+  var boardID, teamID
+  app.initialized().then(function getClient(_client) {
+    client = _client;
+    client.instance.context().then(function (context) {
+      console.log('Modal instance API context', context);
+      boardID = context.data.board
+      teamID = context.data.teamID
+    });
+    client.data.get('ticket')
+      .then(
+        function (data) {
+          console.log('inside of data')
+          // document.getElementById('email').value = data.ticket.sender_email
+        },
+        function (error) {
+          console.log('Child:DataApi', error);
+        }
+      );
+  });
+
+  // method to share miro board
+  function shareBoard() {
+    var path = '/boards/' + boardID + '/share',
+      headers = { "Authorization": 'Bearer <%= access_token %>', 'Content-Type': 'Application/json' },
+      body = { emails: [document.getElementById('email').value], role: document.getElementById('role').value, "teamInvitationStrategy": "off", message: document.getElementById('message').value }
+    reqData = { body: JSON.stringify(body), headers: headers, isOAuth: true },
+      console.log('reqData', reqData)
+    url = 'https://api.miro.com/v1' + path;
+    app.initialized().then(function getClient(_client) {
+    client = _client;
+      client.request.post(url, reqData)
+        .then(function (data) {
+          notify(data)
+        },
+          function (error) {
+            //handle failure
+            inviteToTeam()
+          })
+    })
+  }
+
+  // method to invite user to team
+  function inviteToTeam() {
+    var path = '/teams/'+teamID+'/invite'
+      headers = { "Authorization": 'Bearer <%= access_token %>', 'Content-Type': 'Application/json' },
+      body = { emails: [document.getElementById('email').value]}
+    reqData = { body: JSON.stringify(body), headers: headers, isOAuth: true },
+      console.log('reqData', reqData)
+    url = 'https://api.miro.com/v1' + path;
+    app.initialized().then(function getClient(_client) {
+    client = _client;
+      client.request.post(url, reqData)
+        .then(function (data) {
+          console.log('data', data)
+          if(data.status === 200) console.log('invited successfully')
+        },
+          function (error) {
+            console.log('error', error)
+          })
+    })
+  }
+
+
+  function notify(response) {
+    var status = document.getElementById('error')
+    status.innerHTML = response.status === 200 ? 'Board shared successfully' : JSON.parse(response.response).message
+  }
+  
+</script>
+<link rel='stylesheet' type='text/css' href='../styles/modal.css' />
+
+<body>
+  <div class='form' id="form">
+    <div id="error"></div>
+      <fw-input label="Email" type='text' name='email' id="email" required clear-input>
+      </fw-input>
+      <fw-select label="Role" required="true" value="viewer" id="role" placeholder="Add role"
+        state-text="Select singluar option">
+        <fw-select-option value="viewer">Viewer</fw-select-option>
+        <fw-select-option value="commenter">Commenter</fw-select-option>
+        <fw-select-option value="editor">Editor</fw-select-option>
+      </fw-select>
+      <fw-textarea rows=5 id='message' label="Message (optional)"
+        placeholder="The message which will be sent to users. This parameter is optional." state="normal">
+      </fw-textarea>
+      <fw-button size="large" type="submit" color="secondary" expand onclick="shareBoard()">Share board</fw-button>
+  </div>
+</body>
+<script type="module" src="https://unpkg.com/@freshworks/crayons/dist/crayons/crayons.esm.js"></script>
+<script nomodule src="https://unpkg.com/@freshworks/crayons/dist/crayons/crayons.js"></script>
+
+</html>

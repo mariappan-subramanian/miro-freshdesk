@@ -1,0 +1,48 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:after,
+*::before {
+  box-sizing: inherit;
+}
+
+.fw-widget-wrapper {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-primary {
+  color: blue;
+}
+
+#boards {
+  width: 100%;
+}
+
+.miro-board-icon {
+  background: url("./images/board.png");
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  height: 25px;
+  width: 10%;
+  float: left;
+  margin-left: 8%;
+}
+
+.miro-div {
+  margin: 1rem;
+}
+
+.btn-share {
+  margin-left: 0.6rem;
+}
+
+.miro-div a {
+  color: rgb(165, 42, 99);
+  font-size: 14px;
+  margin-left: 0.6rem;
+}
