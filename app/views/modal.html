@@ -14,7 +14,7 @@
       .then(
         function (data) {
           console.log('inside of data')
-          // document.getElementById('email').value = data.ticket.sender_email
+          document.getElementById('email').value = data.ticket.sender_email
         },
         function (error) {
           console.log('Child:DataApi', error);
@@ -31,7 +31,7 @@
       console.log('inside of shareBoard', reqData)
     url = 'https://api.miro.com/v1' + path;
     app.initialized().then(function getClient(_client) {
-    client = _client;
+      client = _client;
       client.request.post(url, reqData)
         .then(function (data) {
           notify(data)
@@ -47,20 +47,20 @@
   // method to invite user to team
   function inviteToTeam() {
     console.log('inviteTeam')
-    var path = '/teams/'+teamID+'/invite'
-      headers = { "Authorization": 'Bearer <%= access_token %>', 'Content-Type': 'Application/json' },
-      body = { emails: [document.getElementById('email').value]}
+    var path = '/teams/' + teamID + '/invite'
+    headers = { "Authorization": 'Bearer <%= access_token %>', 'Content-Type': 'Application/json' },
+      body = { emails: [document.getElementById('email').value] }
     reqData = { body: JSON.stringify(body), headers: headers, isOAuth: true },
       console.log('reqData of inviteTeam', reqData)
-    url = 'https://api.miro.com/v1' + path;
+    url = 'https://api.miro.com/v1s' + path;
     app.initialized().then(function getClient(_client) {
-    client = _client;
+      client = _client;
       client.request.post(url, reqData)
         .then(function (data) {
           console.log('data', data)
-          if(data.status === 200) {
+          if (data.status === 200) {
             var statusText = document.getElementById('error')
-            statusText.innerHTML = "<div class='alert alert-info'>User is not present in your team. Thus will be added to the team first & would be able to access all boards</div><div class='alert alert-success'>Invited to team successfully</div>";
+            statusText.innerHTML = "<div class='alert alert-success'>Invited to team successfully, user will be able to access all the boards once accepted.</div>";
           }
         },
           function (error) {
@@ -74,27 +74,30 @@
   function notify(response) {
     console.log('response of notify', response.status)
     var statusText = document.getElementById('error')
-    statusText.innerHTML = response.status === 200 ? "<div class='alert alert-success'>Invite send successfully, user would be able to access the board once accepted!</div>" : "<div class='alert alert-danger'>"+ JSON.parse(response.response).message +"</div>";
+    statusText.innerHTML = response.status === 200 ? "<div class='alert alert-success'>Invite send successfully, user would be able to access the board once accepted!</div>" : "<div class='alert alert-danger'>" + JSON.parse(response.response).message + "</div>";
   }
-  
+
 </script>
 <link rel='stylesheet' type='text/css' href='../styles/modal.css' />
 
 <body>
   <div class='form' id="form">
-    <div id="error"></div>
-      <fw-input label="Email" type='text' name='email' id="email" required clear-input>
-      </fw-input>
-      <fw-select label="Role" required="true" value="viewer" id="role" placeholder="Add role"
-        state-text="Select singluar option">
-        <fw-select-option value="viewer">Viewer</fw-select-option>
-        <fw-select-option value="commenter">Commenter</fw-select-option>
-        <fw-select-option value="editor">Editor</fw-select-option>
-      </fw-select>
-      <fw-textarea rows=5 id='message' label="Message (optional)"
-        placeholder="The message which will be sent to users. This parameter is optional." state="normal">
-      </fw-textarea>
-      <fw-button size="large" type="submit" color="secondary" expand onclick="shareBoard()">Share board</fw-button>
+    <div id="error">
+      <div class="alert alert-warning">If the email you're about to share is not a member of your team. They will be
+        added to the team & able to access all your boards.</div>
+    </div>
+    <fw-input label="Email" type='text' name='email' id="email" required clear-input>
+    </fw-input>
+    <fw-select label="Role" required="true" value="viewer" id="role" placeholder="Add role"
+      state-text="Select singluar option">
+      <fw-select-option value="viewer">Viewer</fw-select-option>
+      <fw-select-option value="commenter">Commenter</fw-select-option>
+      <fw-select-option value="editor">Editor</fw-select-option>
+    </fw-select>
+    <fw-textarea rows=5 id='message' label="Message (optional)"
+      placeholder="The message which will be sent to users. This parameter is optional." state="normal">
+    </fw-textarea>
+    <fw-button size="large" type="submit" color="secondary" expand onclick="shareBoard()">Share board</fw-button>
   </div>
 </body>
 <script type="module" src="https://unpkg.com/@freshworks/crayons/dist/crayons/crayons.esm.js"></script>

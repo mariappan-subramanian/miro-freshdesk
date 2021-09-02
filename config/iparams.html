@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <title>Miro Boards</title>
+</head>
+<script src="https://static.freshdev.io/fdk/2.0/assets/fresh_client.js"></script>
+<link rel="stylesheet" type="text/css" href="https://static.freshdev.io/fdk/2.0/assets/freshdesk.css" />
+<link rel="stylesheet" href="./assets/iparams.css" />
+
+<body>
+  <div class="input-section">
+    <label>Pick a board: (Here is where cards will be created whenever a new ticket get's created in your freshdesk
+      account)</label><br />
+    <select id="board" class="input">
+      <option disabled selected>Pick a board</option>
+    </select>
+  </div>
+
+  <script src="./assets/iparams.js"></script>
+  <script>
+    function postConfigs() {
+      return {
+        board_details: {
+          board: document.querySelector("#board").value,
+          boardID: document.querySelector("#board option:checked").getAttribute('id'),
+        }
+      };
+    }
+
+    function getConfigs(savedConfigs) {
+      if (savedConfigs) {
+        window.savedConfigs = savedConfigs;
+      }
+    }
+
+  </script>
+</body>
+
+</html>

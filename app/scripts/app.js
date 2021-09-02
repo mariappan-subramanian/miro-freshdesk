@@ -32,6 +32,7 @@ function showModal(boardID) {
 }
 
 function onAppActivate() {
+  getIparams()
   getAuthDetails(getBoards)
   function getAuthDetails(callback) {
     var path = '/oauth-token',
@@ -43,6 +44,7 @@ function onAppActivate() {
         var response = JSON.parse(data.response);
         teamID = response.team.id
         var teamName = response.team.name
+        storeTeamID(teamID)
         if (response.length == 0) {
           document.querySelector('#boards').innerHTML += "<div class='alert alert-warning'>No boards in your current connected account.</div>";
         } else {
@@ -52,8 +54,12 @@ function onAppActivate() {
       }, function () {
         document.querySelector('#boards').innerHTML += "<div class='alert alert-danger'>Error displaying boards</div>";
       });
+
+    function storeTeamID(teamID) {
+      localStorage.setItem('team', JSON.stringify({ "teamID": teamID }))
+    }
   }
-  
+
   function getBoards(teamID) {
     var html = '';
     var path = '/teams/' + teamID + '/boards?limit=10&offset=0',
@@ -77,6 +83,13 @@ function onAppActivate() {
         document.querySelector('#boards').innerHTML += "<div class='alert alert-danger'>Error displaying boards</div>";
       });
   }
+}
+
+function getIparams() {
+  function getBoard(payload) {
+    console.log('board', payload)
+  }
+  console.log(client.iparams.get('board_details').then(getBoard))
 }
 
 function handleErr(err) {
