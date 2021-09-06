@@ -23,6 +23,14 @@ function getAllBoards(teamID) {
 
 function getTeam() {
   var team = JSON.parse(localStorage.getItem('team'))
+  client.db.get("team").then (
+    function(data) {
+      console.log('team object retrieved', data)
+    },
+    function(error) {
+      console.log('error accessing team', error)
+      // failure operation
+    });
   getAllBoards(team.teamID)
 }
 

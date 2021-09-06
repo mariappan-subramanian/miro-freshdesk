@@ -56,7 +56,14 @@ function onAppActivate() {
       });
 
     function storeTeamID(teamID) {
-      localStorage.setItem('team', JSON.stringify({ "teamID": teamID }))
+      client.db.set( "team", { "teamID": teamID }).then (
+        function(data) {
+          console.log('team tracked successfully', data)
+        },
+        function(error) {
+          // failure operation
+          console.log('error tracking selected team', error)
+        });
     }
   }
 

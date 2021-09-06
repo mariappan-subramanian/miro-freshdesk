@@ -25,6 +25,7 @@ _Note:_ The board where new cards are being created is chosen by the user via a 
 | Instance methods | To get context inside modal - sharing data to-and-fro |
 | Oauth | Authentication - connecting miro with freshdesk account | 
 | Serveless - Product events  | (ticketCreated) used to create miro card widget whenever new ticket is created|
+| Data storage | to keep track of selected team during app installation |
 
 
 ### <u>Steps to run the app locally</u>
