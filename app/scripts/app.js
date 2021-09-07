@@ -16,7 +16,7 @@ document.onreadystatechange = function () {
 function showModal(boardID) {
   client.interface.trigger('showModal', {
     title: 'Share your miro board',
-    data: { board: boardID, teamID: teamID },
+    data: { board: boardID, teamID: team.teamID },
     template: 'views/modal.html'
   })
     .then(
@@ -29,8 +29,9 @@ function showModal(boardID) {
     );
 }
 
+var team
 function onAppActivate() {
-  let team = JSON.parse(localStorage.getItem('team'))
+  team = JSON.parse(localStorage.getItem('team'))
 
   if(team) getBoards(team)
   
