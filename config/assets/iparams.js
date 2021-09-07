@@ -34,7 +34,7 @@ function getAuthDetails() {
         teamID: response.team.id,
         teamName: response.team.name
       }
-      storeTeam(team)
+      localStorage.setItem('team', JSON.stringify(team))
       if (response.length == 0) {
         console.log("No boards in your current connected account.");
       } else {
@@ -43,17 +43,6 @@ function getAuthDetails() {
     }, function () {
       console.log("Error displaying boards");
     });
-
-  function storeTeam(team) {
-    client.db.set( "team", team).then (
-      function(data) {
-        console.log('team tracked successfully', data)
-      },
-      function(error) {
-        // failure operation
-        console.log('error tracking selected team', error)
-      });
-  }
 }
 
 var start = (app) => {

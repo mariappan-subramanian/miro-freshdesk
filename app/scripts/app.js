@@ -30,14 +30,9 @@ function showModal(boardID) {
 }
 
 function onAppActivate() {
-  client.db.get("team").then (
-    function(data) {
-      console.log('team from db', data)
-      getBoards(data)
-    },
-    function(error) {
-      console.log("error while fetching from db", error)
-    });
+  let team = JSON.parse(localStorage.getItem('team'))
+
+  if(team) getBoards(team)
   
   function getBoards(team) {
     var html = '';
