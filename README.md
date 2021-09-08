@@ -26,7 +26,6 @@ _Note:_ The board where new cards are being created is chosen by the user via a 
 | Oauth | Authentication - connecting miro with freshdesk account | 
 | Installation params | custom installation page (iparams.html is used) to collect which boards to sync with tickets | 
 | Serveless - Product events  | (ticketCreated) used to create miro card widget whenever new ticket is created|
-| Data storage | to keep track of selected team during app installation |
 
 
 ### <u>Steps to run the app locally</u>
